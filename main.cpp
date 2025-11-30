@@ -15,13 +15,10 @@ void makeTable(double a, double b, double h, ofstream& file) {
     file << "----------------\n";
 
     for (double x = a; x <= b; x += h) {
-        // Проверяем особые точки (где sin(x)=0 или cos(x)=0)
         if (fabs(sin(x)) < 0.001 || fabs(cos(x)) < 0.001) {
-            cout << x << "\tне опр.\n";
-            file << x << "\tне опр.\n";
-        }
-        else {
-            // Вычисляем функцию: y(x) = sqrt(ctg(x)*tg(x))
+            cout << x << "\tundefined\n";
+            file << x << "\tundefined\n";
+        } else {
             double ctg = cos(x) / sin(x);
             double tg = sin(x) / cos(x);
             double y = sqrt(ctg * tg);
@@ -32,38 +29,36 @@ void makeTable(double a, double b, double h, ofstream& file) {
 }
 
 int main() {
-    setlocale(LC_ALL, "Russian");
-
     double a, b, h;
 
-    cout << "Введите начало интервала a: ";
+    cout << "Enter interval start a: ";
     cin >> a;
-    cout << "Введите конец интервала b: ";
+    cout << "Enter interval end b: ";
     cin >> b;
-    cout << "Введите шаг h: ";
+    cout << "Enter step h: ";
     cin >> h;
 
     if (h <= 0) {
-        cout << "Ошибка: шаг должен быть положительным!" << endl;
+        cout << "Error: step must be positive!" << endl;
         return 1;
     }
 
     if (a > b) {
-        cout << "Ошибка: начало должно быть меньше конца!" << endl;
+        cout << "Error: start must be less than end!" << endl;
         return 1;
     }
 
     ofstream file("result.txt");
 
     if (!file.is_open()) {
-        cout << "Ошибка: не удалось создать файл!" << endl;
+        cout << "Error: failed to create file!" << endl;
         return 1;
     }
 
     makeTable(a, b, h, file);
     file.close();
 
-    cout << "Результаты сохранены в файл result.txt" << endl;
+    cout << "Results saved to file result.txt" << endl;
 
     return 0;
 }

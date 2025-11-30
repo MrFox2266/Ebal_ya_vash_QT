@@ -4,71 +4,66 @@
 #include <iomanip>
 
 using namespace std;
+
 void makeTable(double a, double b, double h, ofstream& file) {
-	cout << fixed << setprecision(4);
-	file << fixed << setprecision(4);
+    cout << fixed << setprecision(4);
+    file << fixed << setprecision(4);
 
-	cout << "x\t\ty(x)\n";
-	file << "x\t\ty(x)\n";
-	cout << "----------------\n";
-	file << "----------------\n";
+    cout << "x\t\ty(x)\n";
+    file << "x\t\ty(x)\n";
+    cout << "----------------\n";
+    file << "----------------\n";
 
-	for (double x = a; x <= b; x += h){
-		if (fabs(sin(x)) < 0.001 || fabs(cos(x)) < 0.001){
-			cout << x << "\tne opredeleno\n";
-			file << x << "\tne opredeleno\n";
-		}
-		else{
-			double ctg = cos(x) / sin(x);
-			double tg = sin(x) / cos(x);
-			double y = sqrt(ctg * tg);
-			cout << x << "\t" << y << "\n";
-			file << x << "\t" << y << "\n";
-		}
-	}
+    for (double x = a; x <= b; x += h) {
+        // Проверяем особые точки (где sin(x)=0 или cos(x)=0)
+        if (fabs(sin(x)) < 0.001 || fabs(cos(x)) < 0.001) {
+            cout << x << "\tне опр.\n";
+            file << x << "\tне опр.\n";
+        }
+        else {
+            // Вычисляем функцию: y(x) = sqrt(ctg(x)*tg(x))
+            double ctg = cos(x) / sin(x);
+            double tg = sin(x) / cos(x);
+            double y = sqrt(ctg * tg);
+            cout << x << "\t" << y << "\n";
+            file << x << "\t" << y << "\n";
+        }
+    }
 }
 
 int main() {
-	double a, b, h;
+    setlocale(LC_ALL, "Russian");
 
-	cout << "Vvedite nachalo intervala a: ";
-	cin >> a;
-	cout << "Vvedite konec intervala b: ";
-	cin >> b;
-	cout << "Vvedite shag h: ";
-	cin >> h;
+    double a, b, h;
 
-	// Проверяем, что ввод прошел успешно
-	if (cin.fail()) {
-		cout << "Oshibka vvoda! Vvedite chisla." << endl;
-		return 1;
-	}
+    cout << "Введите начало интервала a: ";
+    cin >> a;
+    cout << "Введите конец интервала b: ";
+    cin >> b;
+    cout << "Введите шаг h: ";
+    cin >> h;
 
-	if (h <= 0) {
-		cout << "Oshibka: shag dolzhen byt polozhitelnym!" << endl;
-		return 1;
-	}
+    if (h <= 0) {
+        cout << "Ошибка: шаг должен быть положительным!" << endl;
+        return 1;
+    }
 
-	if (a > b) {
-		cout << "Oshibka: nachalo dolzhno byt menshe konca!" << endl;
-		cout << "a = " << a << ", b = " << b << endl; // Покажем что ввел пользователь
-		return 1;
-	}
+    if (a > b) {
+        cout << "Ошибка: начало должно быть меньше конца!" << endl;
+        return 1;
+    }
 
-	ofstream file("result.txt");
+    ofstream file("result.txt");
 
-	if (!file.is_open()) {
-		cout << "Oshibka: ne udalos sozdat fail!" << endl;
-		return 1;
-	}
+    if (!file.is_open()) {
+        cout << "Ошибка: не удалось создать файл!" << endl;
+        return 1;
+    }
 
-	makeTable(a, b, h, file);
-	file.close();
+    makeTable(a, b, h, file);
+    file.close();
 
-	cout << "Rezultaty sohraneny v fail result.txt" << endl;
-	cout << "Najmite Enter dlya vyhoda...";
-	cin.ignore();
-	cin.get();
+    cout << "Результаты сохранены в файл result.txt" << endl;
 
-	return 0;
+    return 0;
 }

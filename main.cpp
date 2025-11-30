@@ -31,18 +31,26 @@ void makeTable(double a, double b, double h, ofstream& file) {
 int main() {
     double a, b, h;
 
-    cout << "Vvedite nachalo intervala a: ";
-    cin >> a;
-    cout << "Vvedite konec intervala b: ";
-    cin >> b;
-    cout << "Vvedite shag h: ";
-    cin >> h;
-
-    // Проверяем, что ввод прошел успешно
-    if (cin.fail()) {
-        cout << "Oshibka vvoda! Vvedite chisla." << endl;
+    cout << "Vvedite nachalo intervala a: " << std::flush;
+    if (!(cin >> a)) {
+        cout << "Oshibka vvoda dlya a! Vvedite chislo." << endl;
         return 1;
     }
+    
+    cout << "Vvedite konec intervala b: " << std::flush;
+    if (!(cin >> b)) {
+        cout << "Oshibka vvoda dlya b! Vvedite chislo." << endl;
+        return 1;
+    }
+    
+    cout << "Vvedite shag h: " << std::flush;
+    if (!(cin >> h)) {
+        cout << "Oshibka vvoda dlya h! Vvedite chislo." << endl;
+        return 1;
+    }
+
+    // Ensure input/output streams are synchronized
+    cin.sync();
 
     if (h <= 0) {
         cout << "Oshibka: shag dolzhen byt polozhitelnym!" << endl;
@@ -65,8 +73,8 @@ int main() {
     makeTable(a, b, h, file);
     file.close();
 
-    cout << "Rezultaty sohraneny v fail result.txt" << endl;
-    cout << "Najmite Enter dlya vyhoda...";
+    cout << "Rezultaty sohraneny v fail result.txt" << std::flush;
+    cout << "Najmite Enter dlya vyhoda..." << std::flush;
     cin.ignore();
     cin.get();
 
